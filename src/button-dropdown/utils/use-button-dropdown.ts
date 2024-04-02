@@ -6,7 +6,7 @@ import { useOpenState } from '../../internal/components/options-list/utils/use-o
 import { ButtonDropdownProps, ButtonDropdownSettings, GroupToggle, HighlightProps, ItemActivate } from '../interfaces';
 import { fireCancelableEvent, CancelableEventHandler, isPlainLeftClick } from '../../internal/events';
 import { KeyCode } from '../../internal/keycode';
-import { getItemTarget, isItemGroup, isLinkItem } from './utils';
+import { getItemTarget, isCheckboxItem, isItemGroup, isLinkItem } from './utils';
 import useHighlightedMenu from './use-highlighted-menu';
 
 interface UseButtonDropdownOptions extends ButtonDropdownSettings {
@@ -66,20 +66,25 @@ export function useButtonDropdown({
   const onGroupToggle: GroupToggle = item => (!isExpanded(item) ? expandGroup(item) : collapseGroup());
 
   const onItemActivate: ItemActivate = (item, event) => {
+    const isCheckbox = isCheckboxItem(item);
+    const isLink = isLinkItem(item);
     const details = {
       id: item.id || 'undefined',
-      href: item.href,
-      external: item.external,
-      target: getItemTarget(item),
+      href: isLink ? item.href : undefined,
+      external: isLink ? item.external : undefined,
+      target: isLink ? getItemTarget(item) : undefined,
+      checkboxState: isCheckbox ? item.checkboxState : undefined,
     };
-    if (onItemFollow && item.href && isPlainLeftClick(event)) {
+    if (onItemFollow && isLink && isPlainLeftClick(event)) {
       fireCancelableEvent(onItemFollow, details, event);
     }
     if (onItemClick) {
       fireCancelableEvent(onItemClick, details, event);
     }
-    onReturnFocus();
-    closeDropdown();
+    if (!isCheckbox) {
+      onReturnFocus();
+      closeDropdown();
+    }
   };
 
   const doVerticalNavigation = (direction: -1 | 1) => {

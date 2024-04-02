@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import '../../__a11y__/to-validate-a11y';
 
 import ButtonDropdown, { ButtonDropdownProps } from '../../../lib/components/button-dropdown';
@@ -19,17 +19,21 @@ const renderWithTrigger = (props: ButtonDropdownProps, triggerName: string) => {
 
 const items: ButtonDropdownProps.Items = [
   { id: 'i1', text: 'item1', description: 'Item 1 description' },
+  { id: 'i2', text: 'item2', description: 'Item 2 description', checkbox: true, checkboxState: true },
   {
     text: 'category1',
     items: [
-      { id: 'i2', text: 'item2' },
       { id: 'i3', text: 'item3' },
+      { id: 'i4', text: 'item4' },
     ],
   },
-  { id: 'i4', text: 'item4' },
+  { id: 'i5', text: 'item5' },
   {
     text: 'category2',
-    items: [{ id: 'i5', text: 'item5' }],
+    items: [
+      { id: 'i6', text: 'item6' },
+      { id: 'i7', text: 'item7', checkbox: true, checkboxState: true },
+    ],
   },
 ];
 
@@ -178,4 +182,22 @@ it('a11y: with main action', async () => {
     <ButtonDropdown mainAction={{ text: 'Main action' }} items={items} ariaLabel="Actions" />
   );
   await expect(container).toValidateA11y();
+});
+
+it('a11y: checkbox role and state', () => {
+  const { container } = render(
+    <ButtonDropdown mainAction={{ text: 'Main action' }} items={items} ariaLabel="Actions" />
+  );
+  const wrapper = createWrapper(container).findButtonDropdown()!;
+  wrapper.openDropdown();
+  const menuElement = wrapper.findOpenDropdown()!.find('[role="menu"]')!;
+
+  // Should have 2 elements with the menucheckboxitem role
+  const menuItems = menuElement.findAll('[role="menuitemcheckbox"]');
+  expect(menuItems.length).toBe(2);
+
+  // Clicking should toggle aria-checked
+  expect(menuItems[0].getElement()).toHaveAttribute('aria-checked', 'true');
+  act(() => wrapper.findItemById('i2')!.click());
+  expect(menuItems[0].getElement()).toHaveAttribute('aria-checked', 'false');
 });

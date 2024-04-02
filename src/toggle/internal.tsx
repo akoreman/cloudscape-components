@@ -11,7 +11,7 @@ import { InternalBaseComponentProps } from '../internal/hooks/use-base-component
 import { ToggleProps } from './interfaces';
 import { useFormFieldContext } from '../internal/context/form-field-context';
 
-type InternalToggleProps = ToggleProps & InternalBaseComponentProps;
+export type InternalToggleProps = ToggleProps & InternalBaseComponentProps;
 
 const InternalToggle = React.forwardRef<ToggleProps.Ref, InternalToggleProps>(
   (

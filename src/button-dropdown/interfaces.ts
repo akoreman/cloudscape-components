@@ -27,12 +27,6 @@ export interface ButtonDropdownProps extends BaseComponentProps, ExpandToViewpor
 
    * - `description` (string) - additional data that will be passed to a `data-description` attribute.
 
-   * - `href` (string) - (Optional) Defines the target URL of the menu item, turning it into a link.
-
-   * - `external` (boolean) - Marks a menu item as external by adding an icon after the menu item text. The link will open in a new tab when clicked. Note that this only works when `href` is also provided.
-
-   * - `externalIconAriaLabel` (string) - Adds an `aria-label` to the external icon.
-
    * - `iconName` (string) - (Optional) Specifies the name of the icon, used with the [icon component](/components/icon/).
 
    * - `iconAlt` (string) - (Optional) Specifies alternate text for the icon when using `iconUrl`.
@@ -40,6 +34,16 @@ export interface ButtonDropdownProps extends BaseComponentProps, ExpandToViewpor
    * - `iconUrl` (string) - (Optional) Specifies the URL of a custom icon.
 
    * - `iconSvg` (ReactNode) - (Optional) Custom SVG icon. Equivalent to the `svg` slot of the [icon component](/components/icon/).
+
+   * - `href` (string) - (Optional) Defines the target URL of the menu item, turning it into a link. Note that this is mutually exclusive with the `checkbox` parameter.
+
+   * - `external` (boolean) - Marks a menu item as external by adding an icon after the menu item text. The link will open in a new tab when clicked. Note that this only works when `href` is also provided.
+
+   * - `externalIconAriaLabel` (string) - Adds an `aria-label` to the external icon.
+
+   * - `checkbox` (boolean) - (Optional) Defines whether the menu item should be displayed as a checkbox item. Checkbox items display a toggle next to them displaying the current state of the toggle. Note that this is mutually exclusive with the `href` parameter.
+
+   * - `checkboxState` (boolean) - The current checkbox state of the item.  Note that this only works when `checkbox` is set to `true`.
 
    */
   items: ReadonlyArray<ButtonDropdownProps.ItemOrGroup>;
@@ -124,21 +128,31 @@ export namespace ButtonDropdownProps {
     iconSvg?: React.ReactNode;
   }
 
-  export interface Item {
+  export interface BaseItem {
     id: string;
     text: string;
     lang?: string;
     disabled?: boolean;
     disabledReason?: string;
     description?: string;
-    href?: string;
-    external?: boolean;
-    externalIconAriaLabel?: string;
     iconAlt?: string;
     iconName?: IconProps.Name;
     iconUrl?: string;
     iconSvg?: React.ReactNode;
   }
+
+  export interface CheckboxItem extends ButtonDropdownProps.BaseItem {
+    checkbox: boolean;
+    checkboxState: boolean;
+  }
+
+  export interface LinkItem extends ButtonDropdownProps.BaseItem {
+    href: string;
+    external?: boolean;
+    externalIconAriaLabel?: string;
+  }
+
+  export type Item = ButtonDropdownProps.BaseItem | ButtonDropdownProps.CheckboxItem | ButtonDropdownProps.LinkItem;
 
   export interface ItemGroup extends Omit<Item, 'id' | 'text'> {
     id?: string;
@@ -203,12 +217,8 @@ export interface ItemListProps extends HighlightProps {
   variant?: InternalButtonDropdownProps['variant'];
 }
 
-export interface LinkItem extends ButtonDropdownProps.Item {
-  href: string;
-}
-
 export interface ItemProps {
-  item: ButtonDropdownProps.Item | LinkItem;
+  item: ButtonDropdownProps.Item;
   disabled: boolean;
   highlighted: boolean;
   onItemActivate: ItemActivate;
@@ -221,7 +231,7 @@ export interface ItemProps {
   variant?: ItemListProps['variant'];
 }
 
-export interface InternalItem extends ButtonDropdownProps.Item {
+export interface InternalItem extends ButtonDropdownProps.BaseItem {
   badge?: boolean;
 }
 

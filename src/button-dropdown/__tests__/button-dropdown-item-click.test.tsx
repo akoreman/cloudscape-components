@@ -33,6 +33,8 @@ const items: ButtonDropdownProps.Items = [
   { id: 'i2', text: 'item2', disabled: true },
   { id: 'i3', text: 'item3', href: 'https://amazon.com', external: true },
   { id: 'i4', text: 'item4', href: 'https://amazon.com', disabled: true },
+  { id: 'i5', text: 'item5', checkbox: true, checkboxState: true },
+  { id: 'i6', text: 'item6', checkbox: true, checkboxState: true, disabled: true },
 ];
 
 [{ expandToViewport: false }, { expandToViewport: true }].forEach(props => {
@@ -101,6 +103,23 @@ const items: ButtonDropdownProps.Items = [
     test('does not hide the dropdown after clicking a disabled item', () => {
       act(() => wrapper.findItemById('i2')!.click());
       expect(wrapper.findOpenDropdown()).not.toBe(null);
+    });
+
+    test('fires the event when a checkbox item is clicked', () => {
+      // After first click the checkbox should be set to false
+      act(() => wrapper.findItemById('i5')!.click());
+      expect(onClickSpy).toHaveBeenCalledTimes(1);
+      expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: { id: 'i5', checkboxState: false } }));
+
+      // After second click the checkbox should be set to true
+      act(() => wrapper.findItemById('i5')!.click());
+      expect(onClickSpy).toHaveBeenCalledTimes(2);
+      expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: { id: 'i5', checkboxState: true } }));
+    });
+
+    test('does not fire the event when a disabled checkbox item is clicked', () => {
+      act(() => wrapper.findItemById('i6')!.click());
+      expect(onClickSpy).not.toHaveBeenCalled();
     });
   });
 });

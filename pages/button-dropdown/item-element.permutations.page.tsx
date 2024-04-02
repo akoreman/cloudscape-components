@@ -148,6 +148,34 @@ const permutations = createPermutations<ItemProps>([
     onItemActivate: [() => {}],
     highlightItem: [() => {}],
   },
+  // With checkbox without icon
+  {
+    item: [
+      { id: '1', text: 'Option', checkbox: true, checkboxState: true },
+      { id: '1', text: 'Option', checkbox: true, checkboxState: false },
+    ],
+    disabled: [false, true],
+    highlighted: [false, true],
+    lastInSection: [false, true],
+    hasCategoryHeader: [false],
+    showDivider: [false, true],
+    onItemActivate: [() => {}],
+    highlightItem: [() => {}],
+  },
+  // With checkbox with icon
+  {
+    item: [
+      { id: '1', text: 'Option', checkbox: true, checkboxState: true, iconName: 'gen-ai' },
+      { id: '1', text: 'Option', checkbox: true, checkboxState: false, iconName: 'gen-ai' },
+    ],
+    disabled: [false, true],
+    highlighted: [false, true],
+    lastInSection: [false, true],
+    hasCategoryHeader: [false],
+    showDivider: [false, true],
+    onItemActivate: [() => {}],
+    highlightItem: [() => {}],
+  },
 ]);
 
 export default function () {
@@ -158,7 +186,7 @@ export default function () {
         <PermutationsView
           permutations={permutations}
           render={permutation => (
-            <Box margin={{ bottom: 'xxl' }} className={styles['dropdown-permutation']}>
+            <Box margin={{ bottom: 'l' }} className={styles['dropdown-permutation']}>
               <div role="menu">{<ItemElement {...permutation} />}</div>
             </Box>
           )}

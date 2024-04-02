@@ -1,9 +1,9 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useReducer } from 'react';
 import clsx from 'clsx';
 import { ItemProps } from '../interfaces';
-import { isLinkItem } from '../utils/utils';
+import { isCheckboxItem, isLinkItem } from '../utils/utils';
 import styles from './styles.css.js';
 import Tooltip from '../tooltip';
 
@@ -12,7 +12,9 @@ import { getItemTarget } from '../utils/utils';
 import useHiddenDescription from '../utils/use-hidden-description';
 import InternalIcon, { InternalIconProps } from '../../icon/internal';
 import { useDropdownContext } from '../../internal/components/dropdown/context';
-import { getMenuItemProps } from '../utils/menu-item';
+import { getMenuItemProps, getMenuItemCheckboxProps } from '../utils/menu-item';
+import InternalToggle, { InternalToggleProps } from '../../toggle/internal';
+import { KeyCode } from '../../internal/keycode';
 
 const ItemElement = ({
   item,
@@ -28,6 +30,11 @@ const ItemElement = ({
   variant = 'normal',
 }: ItemProps) => {
   const isLink = isLinkItem(item);
+  const isCheckbox = isCheckboxItem(item);
+
+  // We want to be able to force and update of the element when the checkbox state changes
+  const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
+
   const onClick = (event: React.MouseEvent) => {
     // Stop propagation to parent node and handle event exclusively in here. This ensures
     // that no group will interfere with the default behavior of links
@@ -36,8 +43,26 @@ const ItemElement = ({
       event.preventDefault();
     }
     if (!disabled) {
+      switchCheckbox();
       onItemActivate(item, event);
     }
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    if (item.disabled) {
+      return;
+    }
+    if (event.keyCode === KeyCode.enter || event.keyCode === KeyCode.space) {
+      switchCheckbox();
+    }
+  };
+
+  const switchCheckbox = () => {
+    if (!isCheckbox) {
+      return;
+    }
+    item.checkboxState = !item.checkboxState;
+    forceUpdate();
   };
 
   const onHover = () => {
@@ -59,6 +84,7 @@ const ItemElement = ({
       data-testid={item.id}
       data-description={item.description}
       onClick={onClick}
+      onKeyDown={onKeyDown}
       onMouseEnter={onHover}
       onTouchStart={onHover}
     >
@@ -79,6 +105,7 @@ interface MenuItemProps {
 
 function MenuItem({ item, disabled, highlighted }: MenuItemProps) {
   const menuItemRef = useRef<(HTMLSpanElement & HTMLAnchorElement) | null>(null);
+  const isCheckbox = isCheckboxItem(item);
 
   useEffect(() => {
     if (highlighted && menuItemRef.current) {
@@ -96,7 +123,9 @@ function MenuItem({ item, disabled, highlighted }: MenuItemProps) {
     // The current element will always have tabindex=0 which means that it can be tabbed to,
     // while all other items have tabindex=-1 so we can focus them when necessary.
     tabIndex: highlighted ? 0 : -1,
-    ...getMenuItemProps({ disabled }),
+    ...(isCheckbox
+      ? getMenuItemCheckboxProps({ disabled, checked: item.checkboxState })
+      : getMenuItemProps({ disabled })),
     ...(isDisabledWithReason ? targetProps : {}),
   };
 
@@ -130,8 +159,10 @@ function MenuItem({ item, disabled, highlighted }: MenuItemProps) {
 const MenuItemContent = ({ item, disabled }: { item: InternalItemProps; disabled: boolean }) => {
   const hasIcon = !!(item.iconName || item.iconUrl || item.iconSvg);
   const hasExternal = isLinkItem(item) && item.external;
+  const isCheckbox = isCheckboxItem(item);
   return (
     <>
+      {isCheckbox && <MenuItemToggle checked={item.checkboxState} disabled={disabled} />}
       {hasIcon && (
         <MenuItemIcon
           name={item.iconName}
@@ -140,8 +171,9 @@ const MenuItemContent = ({ item, disabled }: { item: InternalItemProps; disabled
           alt={item.iconAlt}
           badge={item.badge}
         />
-      )}{' '}
-      {item.text} {hasExternal && <ExternalIcon disabled={disabled} ariaLabel={item.externalIconAriaLabel} />}
+      )}
+      {item.text}
+      {hasExternal && <ExternalIcon disabled={disabled} ariaLabel={item.externalIconAriaLabel} />}
     </>
   );
 };
@@ -149,6 +181,16 @@ const MenuItemContent = ({ item, disabled }: { item: InternalItemProps; disabled
 const MenuItemIcon = (props: InternalIconProps) => (
   <span className={styles.icon}>
     <InternalIcon {...props} />
+  </span>
+);
+
+// Toggle has aria-hidden and inert set because it's just used as a graphical element,
+// a11y attributes for the checkbox are communicated through the role and aria-checked state
+// of the menu element item.
+const MenuItemToggle = (props: InternalToggleProps) => (
+  // @ts-expect-error inert attribute is not part of @types/react-dom: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/60822
+  <span className={styles.icon} aria-hidden="true" inert="true">
+    <InternalToggle {...props} />
   </span>
 );
 

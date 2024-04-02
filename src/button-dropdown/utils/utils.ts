@@ -1,14 +1,19 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import { ButtonDropdownProps, LinkItem } from '../interfaces';
+import { ButtonDropdownProps } from '../interfaces';
 
 export const isItemGroup = (item: ButtonDropdownProps.ItemOrGroup): item is ButtonDropdownProps.ItemGroup =>
   item && (item as ButtonDropdownProps.ItemGroup).items !== undefined;
 
-export const isLinkItem = (item: LinkItem | ButtonDropdownProps.ItemOrGroup): item is LinkItem =>
-  item && (item as LinkItem).href !== undefined;
+export const isLinkItem = (item: ButtonDropdownProps.ItemOrGroup): item is ButtonDropdownProps.LinkItem =>
+  item && (item as ButtonDropdownProps.LinkItem).href !== undefined;
 
-export const getItemTarget = (item: ButtonDropdownProps.Item) => (item.external ? '_blank' : undefined);
+export const isCheckboxItem = (item: ButtonDropdownProps.ItemOrGroup): item is ButtonDropdownProps.CheckboxItem =>
+  item &&
+  (item as ButtonDropdownProps.CheckboxItem).checkbox &&
+  (item as ButtonDropdownProps.CheckboxItem).checkboxState !== undefined;
+
+export const getItemTarget = (item: ButtonDropdownProps.LinkItem) => (item.external ? '_blank' : undefined);
 
 export function indexIncludes(source: number[], target: number[]) {
   for (let index = 0; index < source.length; index++) {
