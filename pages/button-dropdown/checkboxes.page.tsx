@@ -6,60 +6,89 @@ import styles from './styles.scss';
 import ButtonDropdown, { ButtonDropdownProps } from '~components/button-dropdown';
 import ScreenshotArea from '../utils/screenshot-area';
 
-const items: (twoChecked: boolean, fourChecked: boolean) => ButtonDropdownProps['items'] = (
-  twoChecked: boolean,
-  fourChecked: boolean
-) => {
-  return [
+const getItems = (firstChecked: boolean, secondChecked: boolean, thirdChecked: boolean, fourthChecked: boolean) => {
+  const items: ButtonDropdownProps.Items = [
     {
       id: 'id1',
-      text: 'Option without checkbox',
+      text: 'Option with checkbox',
+      checkbox: true,
+      checkboxState: firstChecked,
     },
     {
       id: 'id2',
-      text: 'Option with checkbox',
-      checkbox: true,
-      checkboxState: twoChecked,
-    },
-    {
-      id: 'id3',
       text: 'Disabled option with checkbox',
       disabled: true,
       checkbox: true,
-      checkboxState: true,
+      checkboxState: secondChecked,
+    },
+    {
+      id: 'id3',
+      text: 'Option with checkbox and icon',
+      checkbox: true,
+      checkboxState: thirdChecked,
+      iconName: 'gen-ai',
     },
     {
       id: 'id4',
-      text: 'Option with checkbox and icon',
+      text: 'Disabled option with checkbox and icon',
+      disabled: true,
       checkbox: true,
-      checkboxState: fourChecked,
+      checkboxState: fourthChecked,
       iconName: 'gen-ai',
     },
     {
       id: 'id5',
-      text: 'Disabled option with checkbox and icon',
-      disabled: true,
-      checkbox: true,
-      checkboxState: true,
-      iconName: 'gen-ai',
+      text: 'Option without checkbox',
     },
   ];
+  return items;
 };
 
-export default function ButtonDropdownPage() {
-  const [twoChecked, setTwoChecked] = React.useState(true);
-  const [fourChecked, setFourChecked] = React.useState(true);
+function ButtonDropdownComponent({ variant }: { variant: 'normal' | 'nested' | 'expandable' }) {
+  const [firstChecked, setFirstChecked] = React.useState(true);
+  const [secondChecked, setSecondChecked] = React.useState(true);
+  const [thirdChecked, setThirdChecked] = React.useState(true);
+  const [fourthChecked, setFourthChecked] = React.useState(true);
 
   const onClick = React.useCallback(event => {
-    if (event.detail.checkboxState !== undefined) {
-      if (event.detail.id === 'id2') {
-        setTwoChecked(event.detail.checkboxState);
-      } else if (event.detail.id === 'id4') {
-        setFourChecked(event.detail.checkboxState);
-      }
+    if (event.detail.checkboxState === undefined) {
+      return;
+    }
+    switch (event.detail.id) {
+      case 'id1':
+        setFirstChecked(event.detail.checkboxState);
+        break;
+
+      case 'id2':
+        setSecondChecked(event.detail.checkboxState);
+        break;
+
+      case 'id3':
+        setThirdChecked(event.detail.checkboxState);
+        break;
+
+      case 'id4':
+        setFourthChecked(event.detail.checkboxState);
+        break;
     }
   }, []);
 
+  return (
+    <ButtonDropdown
+      items={
+        variant === 'normal'
+          ? getItems(firstChecked, secondChecked, thirdChecked, fourthChecked)
+          : [{ items: getItems(firstChecked, secondChecked, thirdChecked, fourthChecked), text: 'Category' }]
+      }
+      onItemClick={onClick}
+      expandableGroups={variant === 'expandable'}
+    >
+      {variant}
+    </ButtonDropdown>
+  );
+}
+
+export default function ButtonDropdownPage() {
   return (
     <ScreenshotArea
       disableAnimations={true}
@@ -70,40 +99,14 @@ export default function ButtonDropdownPage() {
     >
       <article>
         <h1>ButtonDropdown witch checkboxes</h1>
-        Note: the checkbox states are shared between the three ButtonDropdowns
         <div className={styles.container}>
-          <ButtonDropdown id="ButtonDropdown2" items={items(twoChecked, fourChecked)} onItemClick={onClick}>
-            ButtonDropdown
-          </ButtonDropdown>
+          <ButtonDropdownComponent variant="normal" />
         </div>
         <div className={styles.container}>
-          <ButtonDropdown
-            id="ButtonDropdown3"
-            items={[
-              {
-                text: 'Nested optons',
-                items: items(twoChecked, fourChecked),
-              },
-            ]}
-            onItemClick={onClick}
-          >
-            With nested options
-          </ButtonDropdown>
+          <ButtonDropdownComponent variant="nested" />
         </div>
         <div className={styles.container}>
-          <ButtonDropdown
-            id="ButtonDropdown4"
-            expandableGroups={true}
-            items={[
-              {
-                text: 'Expanded optons',
-                items: items(twoChecked, fourChecked),
-              },
-            ]}
-            onItemClick={onClick}
-          >
-            With expandable groups
-          </ButtonDropdown>
+          <ButtonDropdownComponent variant="expandable" />
         </div>
       </article>
     </ScreenshotArea>

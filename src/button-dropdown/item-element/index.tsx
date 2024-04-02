@@ -29,7 +29,6 @@ const ItemElement = ({
   variant = 'normal',
 }: ItemProps) => {
   const isLink = isLinkItem(item);
-
   const onClick = (event: React.MouseEvent) => {
     // Stop propagation to parent node and handle event exclusively in here. This ensures
     // that no group will interfere with the default behavior of links
