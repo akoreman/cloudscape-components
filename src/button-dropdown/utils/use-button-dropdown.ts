@@ -73,7 +73,7 @@ export function useButtonDropdown({
       href: isLink ? item.href : undefined,
       external: isLink ? item.external : undefined,
       target: isLink ? getItemTarget(item) : undefined,
-      checkboxState: isCheckbox ? item.checkboxState : undefined,
+      checkboxState: isCheckbox ? !item.checkboxState : undefined,
     };
     if (onItemFollow && isLink && isPlainLeftClick(event)) {
       fireCancelableEvent(onItemFollow, details, event);

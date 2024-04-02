@@ -43,7 +43,7 @@ export interface ButtonDropdownProps extends BaseComponentProps, ExpandToViewpor
 
    * - `checkbox` (boolean) - (Optional) Defines whether the menu item should be displayed as a checkbox item. Checkbox items display a toggle next to them displaying the current state of the toggle. Note that this is mutually exclusive with the `href` parameter.
 
-   * - `checkboxState` (boolean) - The current checkbox state of the item.  Note that this only works when `checkbox` is set to `true`.
+   * - `checkboxState` (boolean) - Controls the current checkbox state of the item.  Note that this only works when `checkbox` is set to `true`.
 
    */
   items: ReadonlyArray<ButtonDropdownProps.ItemOrGroup>;
@@ -166,6 +166,7 @@ export namespace ButtonDropdownProps {
 
   export interface ItemClickDetails extends BaseNavigationDetail {
     id: string;
+    checkboxState?: boolean;
   }
 
   export interface Ref {

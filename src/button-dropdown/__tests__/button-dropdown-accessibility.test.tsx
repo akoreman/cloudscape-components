@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import '../../__a11y__/to-validate-a11y';
 
 import ButtonDropdown, { ButtonDropdownProps } from '../../../lib/components/button-dropdown';
@@ -32,7 +32,7 @@ const items: ButtonDropdownProps.Items = [
     text: 'category2',
     items: [
       { id: 'i6', text: 'item6' },
-      { id: 'i7', text: 'item7', checkbox: true, checkboxState: true },
+      { id: 'i7', text: 'item7', checkbox: true, checkboxState: false },
     ],
   },
 ];
@@ -196,8 +196,7 @@ it('a11y: checkbox role and state', () => {
   const menuItems = menuElement.findAll('[role="menuitemcheckbox"]');
   expect(menuItems.length).toBe(2);
 
-  // Clicking should toggle aria-checked
+  // Checkbox state should be reflected in aria-checked.
   expect(menuItems[0].getElement()).toHaveAttribute('aria-checked', 'true');
-  act(() => wrapper.findItemById('i2')!.click());
-  expect(menuItems[0].getElement()).toHaveAttribute('aria-checked', 'false');
+  expect(menuItems[1].getElement()).toHaveAttribute('aria-checked', 'false');
 });

@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import React, { useEffect, useRef, useReducer } from 'react';
+import React, { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { ItemProps } from '../interfaces';
 import { isCheckboxItem, isLinkItem } from '../utils/utils';
@@ -14,7 +14,6 @@ import InternalIcon, { InternalIconProps } from '../../icon/internal';
 import { useDropdownContext } from '../../internal/components/dropdown/context';
 import { getMenuItemProps, getMenuItemCheckboxProps } from '../utils/menu-item';
 import InternalToggle, { InternalToggleProps } from '../../toggle/internal';
-import { KeyCode } from '../../internal/keycode';
 
 const ItemElement = ({
   item,
@@ -30,10 +29,6 @@ const ItemElement = ({
   variant = 'normal',
 }: ItemProps) => {
   const isLink = isLinkItem(item);
-  const isCheckbox = isCheckboxItem(item);
-
-  // We want to be able to force and update of the element when the checkbox state changes
-  const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
 
   const onClick = (event: React.MouseEvent) => {
     // Stop propagation to parent node and handle event exclusively in here. This ensures
@@ -43,26 +38,8 @@ const ItemElement = ({
       event.preventDefault();
     }
     if (!disabled) {
-      switchCheckbox();
       onItemActivate(item, event);
     }
-  };
-
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (item.disabled) {
-      return;
-    }
-    if (event.keyCode === KeyCode.enter || event.keyCode === KeyCode.space) {
-      switchCheckbox();
-    }
-  };
-
-  const switchCheckbox = () => {
-    if (!isCheckbox) {
-      return;
-    }
-    item.checkboxState = !item.checkboxState;
-    forceUpdate();
   };
 
   const onHover = () => {
@@ -84,7 +61,6 @@ const ItemElement = ({
       data-testid={item.id}
       data-description={item.description}
       onClick={onClick}
-      onKeyDown={onKeyDown}
       onMouseEnter={onHover}
       onTouchStart={onHover}
     >

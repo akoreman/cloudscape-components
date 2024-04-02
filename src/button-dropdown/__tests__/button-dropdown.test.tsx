@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import React from 'react';
+import React, { useState } from 'react';
 import { act, render, screen } from '@testing-library/react';
 
 import ButtonDropdown, { ButtonDropdownProps } from '../../../lib/components/button-dropdown';
@@ -316,4 +316,40 @@ describe('with main action', () => {
 
     expect(wrapper.findMainAction()!.getElement()).toHaveFocus();
   });
+});
+
+test('should work in controlled context', () => {
+  const onClickSpy = jest.fn();
+  function StateWrapper() {
+    const [checked, setChecked] = useState(true);
+    return (
+      <ButtonDropdown
+        items={[{ id: 'option', text: 'option', checkbox: true, checkboxState: checked }]}
+        onItemClick={event => {
+          onClickSpy(event.detail);
+          setChecked(event.detail.checkboxState!);
+        }}
+      />
+    );
+  }
+
+  const { container } = render(<StateWrapper />);
+  const wrapper = createWrapper(container).findButtonDropdown()!;
+
+  // Open button dropdown
+  wrapper.openDropdown();
+  const itemElement = wrapper.findItems()[0];
+
+  // Click the item and verify it called the onClickSpy with the correct state
+  itemElement.click();
+  expect(onClickSpy).toHaveBeenCalledTimes(1);
+  expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ checkboxState: false }));
+
+  itemElement.click();
+  expect(onClickSpy).toHaveBeenCalledTimes(2);
+  expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ checkboxState: true }));
+
+  itemElement.click();
+  expect(onClickSpy).toHaveBeenCalledTimes(3);
+  expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ checkboxState: false }));
 });

@@ -87,7 +87,7 @@ const items: ButtonDropdownProps.Items = [
       expect(onFollowSpy).toHaveBeenCalledTimes(1);
     });
 
-    test('should toggle checkbox corrently when item with checkbox pressed using enter', () => {
+    test('should fire event correctly when item with checkbox pressed using enter', () => {
       act(() => wrapper.findOpenDropdown()!.keydown(KeyCode.down));
       act(() => wrapper.findOpenDropdown()!.keydown(KeyCode.down));
       act(() => wrapper.findOpenDropdown()!.keydown(KeyCode.down));
@@ -97,14 +97,9 @@ const items: ButtonDropdownProps.Items = [
       act(() => wrapper.findItems()[4]!.keydown(KeyCode.enter));
       expect(onClickSpy).toHaveBeenCalledTimes(1);
       expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: { id: 'i5', checkboxState: false } }));
-
-      // Fire keydown on the 5th element, checkbox should be true after click
-      act(() => wrapper.findItems()[4]!.keydown(KeyCode.enter));
-      expect(onClickSpy).toHaveBeenCalledTimes(2);
-      expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: { id: 'i5', checkboxState: true } }));
     });
 
-    test('should toggle checkbox corrently when item with checkbox pressed using space', () => {
+    test('should fire event correctly when item with checkbox pressed using space', () => {
       act(() => wrapper.findOpenDropdown()!.keydown(KeyCode.down));
       act(() => wrapper.findOpenDropdown()!.keydown(KeyCode.down));
       act(() => wrapper.findOpenDropdown()!.keydown(KeyCode.down));
@@ -115,12 +110,6 @@ const items: ButtonDropdownProps.Items = [
       act(() => wrapper.findItems()[4]!.keyup(KeyCode.space));
       expect(onClickSpy).toHaveBeenCalledTimes(1);
       expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: { id: 'i5', checkboxState: false } }));
-
-      // Fire keydown on the 5th element, checkbox should be true after click
-      act(() => wrapper.findItems()[4]!.keydown(KeyCode.space));
-      act(() => wrapper.findItems()[4]!.keyup(KeyCode.space));
-      expect(onClickSpy).toHaveBeenCalledTimes(2);
-      expect(onClickSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: { id: 'i5', checkboxState: true } }));
     });
   });
 });
