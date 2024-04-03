@@ -17,7 +17,7 @@ const items: ButtonDropdownProps.Items = [
   { id: 'i2', text: 'item2', href: 'http://amazon.com' },
   { id: 'i3', text: 'item3', disabled: true },
   { id: 'i4', text: 'item4' },
-  { id: 'i5', text: 'item5', checkbox: true, checkboxState: true },
+  { id: 'i5', text: 'item5', checkboxState: true },
 ];
 
 [{ expandToViewport: false }, { expandToViewport: true }].forEach(props => {

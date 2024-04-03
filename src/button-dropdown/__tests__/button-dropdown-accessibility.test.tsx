@@ -19,7 +19,7 @@ const renderWithTrigger = (props: ButtonDropdownProps, triggerName: string) => {
 
 const items: ButtonDropdownProps.Items = [
   { id: 'i1', text: 'item1', description: 'Item 1 description' },
-  { id: 'i2', text: 'item2', description: 'Item 2 description', checkbox: true, checkboxState: true },
+  { id: 'i2', text: 'item2', description: 'Item 2 description', checkboxState: true },
   {
     text: 'category1',
     items: [
@@ -32,7 +32,7 @@ const items: ButtonDropdownProps.Items = [
     text: 'category2',
     items: [
       { id: 'i6', text: 'item6' },
-      { id: 'i7', text: 'item7', checkbox: true, checkboxState: false },
+      { id: 'i7', text: 'item7', checkboxState: false },
     ],
   },
 ];

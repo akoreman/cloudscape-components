@@ -324,7 +324,7 @@ test('should work in controlled context', () => {
     const [checked, setChecked] = useState(true);
     return (
       <ButtonDropdown
-        items={[{ id: 'option', text: 'option', checkbox: true, checkboxState: checked }]}
+        items={[{ id: 'option', text: 'option', checkboxState: checked }]}
         onItemClick={event => {
           onClickSpy(event.detail);
           setChecked(event.detail.checkboxState!);

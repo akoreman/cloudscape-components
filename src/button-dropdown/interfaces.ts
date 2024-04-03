@@ -41,9 +41,7 @@ export interface ButtonDropdownProps extends BaseComponentProps, ExpandToViewpor
 
    * - `externalIconAriaLabel` (string) - Adds an `aria-label` to the external icon.
 
-   * - `checkbox` (boolean) - (Optional) Defines whether the menu item should be displayed as a checkbox item. Checkbox items display a toggle next to them displaying the current state of the toggle. Note that this is mutually exclusive with the `href` parameter.
-
-   * - `checkboxState` (boolean) - Controls the current checkbox state of the item.  Note that this only works when `checkbox` is set to `true`.
+   * - `checkboxState` (boolean) - (Optional) When set the item is displayed as a checkbox item. Controls the current checkbox state of the item. Note that this is mutually exclusive with the `href` parameter.
 
    */
   items: ReadonlyArray<ButtonDropdownProps.ItemOrGroup>;
@@ -142,7 +140,6 @@ export namespace ButtonDropdownProps {
   }
 
   export interface CheckboxItem extends ButtonDropdownProps.BaseItem {
-    checkbox: boolean;
     checkboxState: boolean;
   }
 

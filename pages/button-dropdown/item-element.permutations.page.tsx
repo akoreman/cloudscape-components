@@ -151,8 +151,8 @@ const permutations = createPermutations<ItemProps>([
   // With checkbox without icon
   {
     item: [
-      { id: '1', text: 'Option', checkbox: true, checkboxState: true },
-      { id: '1', text: 'Option', checkbox: true, checkboxState: false },
+      { id: '1', text: 'Option', checkboxState: true },
+      { id: '1', text: 'Option', checkboxState: false },
     ],
     disabled: [false, true],
     highlighted: [false, true],
@@ -165,8 +165,8 @@ const permutations = createPermutations<ItemProps>([
   // With checkbox with icon
   {
     item: [
-      { id: '1', text: 'Option', checkbox: true, checkboxState: true, iconName: 'gen-ai' },
-      { id: '1', text: 'Option', checkbox: true, checkboxState: false, iconName: 'gen-ai' },
+      { id: '1', text: 'Option', checkboxState: true, iconName: 'gen-ai' },
+      { id: '1', text: 'Option', checkboxState: false, iconName: 'gen-ai' },
     ],
     disabled: [false, true],
     highlighted: [false, true],

@@ -11,20 +11,17 @@ const getItems = (firstChecked: boolean, secondChecked: boolean, thirdChecked: b
     {
       id: 'id1',
       text: 'Option with checkbox',
-      checkbox: true,
       checkboxState: firstChecked,
     },
     {
       id: 'id2',
       text: 'Disabled option with checkbox',
       disabled: true,
-      checkbox: true,
       checkboxState: secondChecked,
     },
     {
       id: 'id3',
       text: 'Option with checkbox and icon',
-      checkbox: true,
       checkboxState: thirdChecked,
       iconName: 'gen-ai',
     },
@@ -32,7 +29,6 @@ const getItems = (firstChecked: boolean, secondChecked: boolean, thirdChecked: b
       id: 'id4',
       text: 'Disabled option with checkbox and icon',
       disabled: true,
-      checkbox: true,
       checkboxState: fourthChecked,
       iconName: 'gen-ai',
     },

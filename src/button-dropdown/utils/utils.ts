@@ -9,9 +9,7 @@ export const isLinkItem = (item: ButtonDropdownProps.ItemOrGroup): item is Butto
   item && (item as ButtonDropdownProps.LinkItem).href !== undefined;
 
 export const isCheckboxItem = (item: ButtonDropdownProps.ItemOrGroup): item is ButtonDropdownProps.CheckboxItem =>
-  item &&
-  (item as ButtonDropdownProps.CheckboxItem).checkbox &&
-  (item as ButtonDropdownProps.CheckboxItem).checkboxState !== undefined;
+  item && (item as ButtonDropdownProps.CheckboxItem).checkboxState !== undefined;
 
 export const getItemTarget = (item: ButtonDropdownProps.LinkItem) => (item.external ? '_blank' : undefined);
 
