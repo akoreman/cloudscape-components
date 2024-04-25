@@ -5,7 +5,7 @@ import styles from './styles.css.js';
 import clsx from 'clsx';
 import InternalIcon from '../icon/internal';
 import InternalButtonDropdown from '../button-dropdown/internal';
-import { CustomTriggerProps, LinkItem } from '../button-dropdown/interfaces';
+import { CustomTriggerProps, ButtonDropdownProps } from '../button-dropdown/interfaces';
 import { InternalButton } from '../button/internal';
 import { BreadcrumbItem } from './item/item';
 import { BreadcrumbGroupProps, EllipsisDropdownProps } from './interfaces';
@@ -121,7 +121,7 @@ export default function InternalBreadcrumbGroup<T extends BreadcrumbGroupProps.I
 
   // Add ellipsis
   if (breadcrumbItems.length >= 2) {
-    const dropdownItems: Array<LinkItem> = items
+    const dropdownItems: Array<ButtonDropdownProps.LinkItem> = items
       .slice(1, items.length - 1)
       .map((item: BreadcrumbGroupProps.Item, index: number) => ({
         id: (index + 1).toString(), // the first item doesn't get inside dropdown

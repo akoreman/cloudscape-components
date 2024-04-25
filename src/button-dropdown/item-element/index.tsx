@@ -13,7 +13,7 @@ import useHiddenDescription from '../utils/use-hidden-description';
 import InternalIcon, { InternalIconProps } from '../../icon/internal';
 import { useDropdownContext } from '../../internal/components/dropdown/context';
 import { getMenuItemProps, getMenuItemCheckboxProps } from '../utils/menu-item';
-import InternalToggle, { InternalToggleProps } from '../../toggle/internal';
+import InternalCheckbox, { InternalCheckboxProps } from '../../checkbox/internal';
 
 const ItemElement = ({
   item,
@@ -133,7 +133,7 @@ const MenuItemContent = ({ item, disabled }: { item: InternalItemProps; disabled
   const isCheckbox = isCheckboxItem(item);
   return (
     <>
-      {isCheckbox && <MenuItemToggle checked={item.checkboxState} disabled={disabled} />}
+      {isCheckbox && <MenuItemCheckbox checked={isCheckbox ? item.checkboxState : false} disabled={disabled} />}
       {hasIcon && (
         <MenuItemIcon
           name={item.iconName}
@@ -158,10 +158,10 @@ const MenuItemIcon = (props: InternalIconProps) => (
 // Toggle has aria-hidden and inert set because it's just used as a graphical element,
 // a11y attributes for the checkbox are communicated through the role and aria-checked state
 // of the menu element item.
-const MenuItemToggle = (props: InternalToggleProps) => (
+const MenuItemCheckbox = (props: InternalCheckboxProps) => (
   // @ts-expect-error inert attribute is not part of @types/react-dom: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/60822
   <span className={styles.icon} aria-hidden="true" inert="true">
-    <InternalToggle {...props} />
+    <InternalCheckbox {...props} />
   </span>
 );
 

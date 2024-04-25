@@ -227,9 +227,11 @@ export interface ItemProps {
   variant?: ItemListProps['variant'];
 }
 
-export interface InternalItem extends ButtonDropdownProps.BaseItem {
+export interface InternalBaseItem extends ButtonDropdownProps.BaseItem {
   badge?: boolean;
 }
+
+export type InternalItem = InternalBaseItem | ButtonDropdownProps.LinkItem | ButtonDropdownProps.CheckboxItem;
 
 export interface InternalItemGroup extends Omit<ButtonDropdownProps.ItemGroup, 'items'> {
   items: InternalItems;

@@ -13,12 +13,12 @@ import { InternalBaseComponentProps } from '../internal/hooks/use-base-component
 import { useFormFieldContext } from '../internal/context/form-field-context';
 import { useSingleTabStopNavigation } from '../internal/context/single-tab-stop-navigation-context';
 
-interface InternalProps extends CheckboxProps, InternalBaseComponentProps {
+export interface InternalCheckboxProps extends CheckboxProps, InternalBaseComponentProps {
   tabIndex?: -1;
   showOutline?: boolean;
 }
 
-const InternalCheckbox = React.forwardRef<CheckboxProps.Ref, InternalProps>(
+const InternalCheckbox = React.forwardRef<CheckboxProps.Ref, InternalCheckboxProps>(
   (
     {
       controlId,
