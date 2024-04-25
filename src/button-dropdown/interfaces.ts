@@ -221,8 +221,6 @@ export interface ItemProps {
   highlighted: boolean;
   onItemActivate: ItemActivate;
   highlightItem: (item: ButtonDropdownProps.ItemOrGroup) => void;
-  first?: boolean;
-  lastInSection: boolean;
   showDivider: boolean;
   hasCategoryHeader: boolean;
   isKeyboardHighlighted?: boolean;
