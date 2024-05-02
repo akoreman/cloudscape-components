@@ -13,6 +13,7 @@ import InternalIcon from '../../../icon/internal';
 import { useNavigate } from './router';
 import { TopNavigationProps } from '../../interfaces';
 import styles from '../../styles.css.js';
+import { isLinkItem } from '../../../button-dropdown/utils/utils';
 
 interface ListItemProps {
   startIcon?: React.ReactNode;
@@ -266,24 +267,26 @@ function dropdownComponentFactory(
   }
 
   return (
-    <LinkItem
-      startIcon={startIcon}
-      href={item.href}
-      external={item.external}
-      context="dropdown-menu"
-      testId={item.id}
-      onClick={event => onItemClick(event, item as ButtonDropdownProps.Item)}
-    >
-      {label}
-      {item.external && (
-        <>
-          {' '}
-          <span aria-label={item.externalIconAriaLabel} role={item.externalIconAriaLabel ? 'img' : undefined}>
-            <InternalIcon name="external" size="normal" />
-          </span>
-        </>
-      )}
-    </LinkItem>
+    isLinkItem(item) && (
+      <LinkItem
+        startIcon={startIcon}
+        href={item.href}
+        external={item.external}
+        context="dropdown-menu"
+        testId={item.id}
+        onClick={event => onItemClick(event, item as ButtonDropdownProps.Item)}
+      >
+        {label}
+        {item.external && (
+          <>
+            {' '}
+            <span aria-label={item.externalIconAriaLabel} role={item.externalIconAriaLabel ? 'img' : undefined}>
+              <InternalIcon name="external" size="normal" />
+            </span>
+          </>
+        )}
+      </LinkItem>
+    )
   );
 }
 
