@@ -94,9 +94,7 @@ function MenuItem({ item, disabled, highlighted }: MenuItemProps) {
     // The current element will always have tabindex=0 which means that it can be tabbed to,
     // while all other items have tabindex=-1 so we can focus them when necessary.
     tabIndex: highlighted ? 0 : -1,
-    ...(isCheckbox
-      ? getMenuItemCheckboxProps({ disabled, checked: item.checkboxState })
-      : getMenuItemProps({ disabled })),
+    ...(isCheckbox ? getMenuItemCheckboxProps({ disabled, checked: item.checked }) : getMenuItemProps({ disabled })),
     ...(isDisabledWithReason ? targetProps : {}),
   };
 
@@ -133,7 +131,7 @@ const MenuItemContent = ({ item, disabled }: { item: InternalItemProps; disabled
   const isCheckbox = isCheckboxItem(item);
   return (
     <>
-      {isCheckbox && <MenuItemCheckbox checked={isCheckbox ? item.checkboxState : false} disabled={disabled} />}
+      {isCheckbox && <MenuItemCheckbox checked={isCheckbox ? item.checked : false} disabled={disabled} />}
       {hasIcon && (
         <MenuItemIcon
           name={item.iconName}

@@ -140,7 +140,7 @@ export namespace ButtonDropdownProps {
   }
 
   export interface CheckboxItem extends ButtonDropdownProps.BaseItem {
-    checkboxState: boolean;
+    checked: boolean;
   }
 
   export interface LinkItem extends ButtonDropdownProps.BaseItem {
